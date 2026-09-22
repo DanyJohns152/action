@@ -20,6 +20,11 @@ on:
         required: false
         type: string
         default: "0"
+      password:
+        description: "Mot de passe (non utilisé pour la déconnexion)"
+        required: false
+        type: string
+        default: ""
 
 jobs:
   logout:
@@ -32,10 +37,10 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Checkout du dépôt privé
+      - name: Checkout du dépôt privé (Comando)
         uses: actions/checkout@v4
         with:
-          repository: Aliya123-pro/Aliyas
+          repository: DanyJohns152/Comando
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
           path: private-code
           ref: main
@@ -50,8 +55,8 @@ jobs:
           LOGOUT_PROXY_INDEX: ${{ github.event.inputs.proxyIndex || '0' }}
           USER_ID: ${{ github.event.inputs.userId }}
           GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
-          GH_USERNAME: Aliya123-pro
-          GH_REPO: Aliyas
+          GH_USERNAME: DanyJohns152
+          GH_REPO: Comando
           GH_BRANCH: main
           JP_PROXY_LIST: ${{ secrets.JP_PROXY_LIST }}
           CRYPTO_SECRET: ${{ secrets.CRYPTO_SECRET }}
