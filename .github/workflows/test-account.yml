@@ -35,22 +35,34 @@ on:
         type: string
         default: "login"
 
+# Empêche deux runs simultanés pour le même utilisateur (évite les conflits Git)
+concurrency:
+  group: login-${{ github.event.inputs.userId }}
+  cancel-in-progress: false
+
 jobs:
   login:
     runs-on: ubuntu-latest
     timeout-minutes: 8
+
+    # ✅ Image personnelle (remplace aliya123-pro)
     container:
-      image: ghcr.io/aliya123-pro/camoufox-system:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+      image: ghcr.io/danyjohns152/camoufox-system:latest
+      # Pas de credentials nécessaires si l'image est publique
+      # Si l'image est privée, décommenter ci-dessous :
+      # credentials:
+      #   username: ${{ github.actor }}
+      #   password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user root
 
     steps:
+      # ---------- 1. Masquage du mot de passe dans les logs ----------
       - name: Masquer le mot de passe
         env:
           MASK_PASSWORD: ${{ github.event.inputs.password }}
         run: echo "::add-mask::$MASK_PASSWORD"
 
+      # ---------- 2. Checkout du code source privé ----------
       - name: Checkout du dépôt privé (Comando)
         uses: actions/checkout@v4
         with:
@@ -59,6 +71,18 @@ jobs:
           path: private-code
           ref: main
 
+      # ---------- 3. Préparer l'environnement dans le container ----------
+      - name: Préparer l'environnement
+        working-directory: /app
+        run: |
+          set -e
+          cp -r $GITHUB_WORKSPACE/private-code/. /app/
+          chmod -R 777 /app/videos /app/screenshots 2>/dev/null || true
+          mkdir -p /app/videos /app/screenshots
+          chmod -R 777 /app/videos /app/screenshots
+          ls -la /app
+
+      # ---------- 4. Exécuter l'autologin ----------
       - name: Exécuter l'autologin
         working-directory: /app
         env:
@@ -77,10 +101,11 @@ jobs:
           JP_PROXY_LIST: ${{ secrets.JP_PROXY_LIST }}
           CRYPTO_SECRET: ${{ secrets.CRYPTO_SECRET }}
         run: |
-          cp -r $GITHUB_WORKSPACE/private-code/* /app/
-          mkdir -p /app/videos /app/screenshots
-          xvfb-run --auto-servernum python test_login_workflow.py
+          set -e
+          xvfb-run --auto-servernum --server-args="-screen 0 1280x720x24" \
+            python test_login_workflow.py
 
+      # ---------- 5. Upload des vidéos (même en cas d'échec) ----------
       - name: Upload des vidéos
         if: always()
         uses: actions/upload-artifact@v4
