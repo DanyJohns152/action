@@ -67,7 +67,7 @@ jobs:
           USER_ID: ${{ github.event.inputs.userId }}
           GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
           GH_USERNAME: https://DanyJohns152
-          GH_REPO: Aliyas
+          GH_REPO: Comando
           GH_BRANCH: main
           JP_PROXY_LIST: ${{ secrets.JP_PROXY_LIST }}
           CRYPTO_SECRET: ${{ secrets.CRYPTO_SECRET }}
