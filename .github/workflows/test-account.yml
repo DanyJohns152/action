@@ -49,7 +49,7 @@ jobs:
       - name: Checkout du dépôt privé
         uses: actions/checkout@v4
         with:
-          repository: Aliya123-pro/Aliyas
+          repository: DanyJohns152/Comando
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
           path: private-code
           ref: main
