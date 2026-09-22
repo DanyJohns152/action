@@ -1,4 +1,4 @@
-name: Login Account (Autologin)
+name: Login Account
 
 on:
   workflow_dispatch:
@@ -29,6 +29,11 @@ on:
         required: false
         type: string
         default: "60:00"
+      action:
+        description: "Action (login)"
+        required: false
+        type: string
+        default: "login"
 
 jobs:
   login:
@@ -46,10 +51,10 @@ jobs:
           MASK_PASSWORD: ${{ github.event.inputs.password }}
         run: echo "::add-mask::$MASK_PASSWORD"
 
-      - name: Checkout du dépôt privé
+      - name: Checkout du dépôt privé (Comando)
         uses: actions/checkout@v4
         with:
-          repository: Aliya123-pro/Aliyas
+          repository: DanyJohns152/Comando
           token: ${{ secrets.PRIVATE_REPO_TOKEN }}
           path: private-code
           ref: main
@@ -66,8 +71,8 @@ jobs:
           TEST_INITIAL_TIMER: ${{ github.event.inputs.initialTimer || '60:00' }}
           USER_ID: ${{ github.event.inputs.userId }}
           GH_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
-          GH_USERNAME: Aliya123-pro
-          GH_REPO: Aliyas
+          GH_USERNAME: DanyJohns152
+          GH_REPO: Comando
           GH_BRANCH: main
           JP_PROXY_LIST: ${{ secrets.JP_PROXY_LIST }}
           CRYPTO_SECRET: ${{ secrets.CRYPTO_SECRET }}
