@@ -31,7 +31,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 6
     container:
-      image: ghcr.io/aliya123-pro/camoufox-system:latest
+      image: ghcr.io/danyjohns152/camoufox-system:latest
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
