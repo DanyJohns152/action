@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 8
     container:
-      image: ghcr.io/aliya123-pro/camoufox-system:latest
+      image: ghcr.io/danyjohns152/camoufox-system:latest
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
@@ -60,5 +60,5 @@ jobs:
         with:
           name: claim-video-${{ github.run_id }}
           path: /app/videos/
-          retention-days: 5
+          retention-days: 1
           if-no-files-found: warn
